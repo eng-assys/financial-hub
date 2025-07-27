@@ -47,12 +47,12 @@ export class AuthService {
       },
     });
 
-    if (!user) throw new UnauthorizedException('Email e/ou senha incorretos');
+    if (!user) throw new UnauthorizedException('Wrong email or password');
 
     const compare = await bcrypt.compare(password, user.password);
 
     if (!compare)
-      throw new UnauthorizedException('Email e/ou senha incorretos');
+      throw new UnauthorizedException('Wrong email or password');
     return this.createToken(user);
   }
 
