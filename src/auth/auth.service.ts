@@ -51,8 +51,7 @@ export class AuthService {
 
     const compare = await bcrypt.compare(password, user.password);
 
-    if (!compare)
-      throw new UnauthorizedException('Wrong email or password');
+    if (!compare) throw new UnauthorizedException('Wrong email or password');
     return this.createToken(user);
   }
 

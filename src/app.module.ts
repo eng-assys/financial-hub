@@ -8,10 +8,15 @@ import { ConfigModule } from '@nestjs/config';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './user/entity/user.entity';
+import configuration from './config/configuration';
+import databaseConfiguration from './config/database-configuration';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration, databaseConfiguration],
+    }),
     ThrottlerModule.forRoot([
       {
         ttl: 1000,
@@ -22,14 +27,17 @@ import { UserEntity } from './user/entity/user.entity';
     forwardRef(() => AuthModule),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DB_HOST,
-      port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 5432,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
+      host: databaseConfiguration().database.host,
+      port: databaseConfiguration().database.port,
+      username: databaseConfiguration().database.username,
+      password: databaseConfiguration().database.password,
+      database: databaseConfiguration().database.databaseName,
       entities: [UserEntity],
       autoLoadEntities: true, // permite detectar entidades automaticamente
-      synchronize: process.env.DB_DATABASE == 'production' ? false : true,
+      synchronize:
+        databaseConfiguration().database.databaseName == 'production'
+          ? false
+          : true,
     }),
   ],
   controllers: [AppController],
