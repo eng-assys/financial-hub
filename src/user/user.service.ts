@@ -36,7 +36,7 @@ export class UserService {
     return await this.usersRepository.find();
   }
 
-  async show(id: number) {
+  async show(id: number): Promise<UserEntity> {
     // return await this.usersRepository.findFirst({
     //   where: {
     //     id,
