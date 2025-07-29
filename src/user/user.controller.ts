@@ -21,24 +21,26 @@ import { AuthGuard } from 'src/guards/auth.guard';
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-  // @SkipThrottle()
-  // @Throttle(20,40)
-  @Post('/')
+  @Post()
   async create(@Body() body: CreateUserDTO) {
     return await this.userService.create(body);
   }
-  @Get('/')
+  
+  @Get()
   async list() {
     return await this.userService.list();
   }
+  
   @Get(':id')
   async show(@ParamId() id: number) {
     return await this.userService.show(id);
   }
+  
   @Put(':id')
   async update(@Body() body: UpdateUserDTO, @Param('id', ParseIntPipe) id) {
     return await this.userService.update(id, body);
   }
+  
   @Patch(':id')
   async updatePartial(
     @Body() body: UpdatePatchUserDTO,
@@ -46,6 +48,7 @@ export class UserController {
   ) {
     return await this.userService.patch(id, body);
   }
+
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id) {
     return await this.userService.delete(id);

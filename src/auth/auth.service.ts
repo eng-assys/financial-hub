@@ -32,6 +32,7 @@ export class AuthService {
       throw new BadRequestException(error);
     }
   }
+  
   checkToken(token: string) {
     try {
       const data = this.JWTService.verify(token);
@@ -40,6 +41,7 @@ export class AuthService {
       throw new BadRequestException(error);
     }
   }
+
   async login(email: string, password: string) {
     const user = await this.usersRepository.findOne({
       where: {
